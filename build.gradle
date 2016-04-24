@@ -1,0 +1,65 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'io.ratpack:ratpack-gradle:1.2.0',
+                 'com.github.jengelman.gradle.plugins:shadow:1.2.2'
+    }
+}
+
+if (!JavaVersion.current().java8Compatible) {
+  throw new IllegalStateException("Must be built with Java 8 or higher")
+}
+
+// The “ratpack” plugin applies the “application” plugin, making it easy to create a standalone application.
+// See: http://gradle.org/docs/current/userguide/application_plugin.html
+apply plugin: "io.ratpack.ratpack-java"
+apply plugin: "com.github.johnrengelman.shadow"
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    testCompile 'junit:junit:4.11'
+
+    // This is a Guice ratpack app
+    compile ratpack.dependency("guice")
+    runtime 'org.slf4j:slf4j-simple:1.7.10'
+
+    compile ratpack.dependency('hystrix')
+    compile ratpack.dependency('rx')
+    compile 'org.apache.httpcomponents:httpasyncclient:4.1.1'
+    compile 'com.datastax.cassandra:cassandra-driver-core:2.1.7.1'
+    compile('org.cassandraunit:cassandra-unit:2.1.9.2') {
+        // conflicts with netty-* dependencies from ratpack and cassandra-driver-core
+        exclude group: 'io.netty', module: 'netty-all'
+    }
+}
+
+// The “ratpack” plugin is IDEA aware.
+// It will create a run configuration in IDEA to launch your app in your IDE, with hot reloading.
+apply plugin: "idea"
+
+idea {
+    project {
+        //use JDK 1.8 in idea
+        jdkName "1.8"
+        languageLevel "1.8"
+        ipr {
+            withXml { provider ->
+                def node = provider.asNode()
+                //configure git support for the project in idea
+                node.component.find { it.'@name' == 'VcsDirectoryMappings' }?.mapping[0].'@vcs' = 'Git'
+            }
+        }
+    }
+}
+
+//some CI config
+apply from: file("gradle/ci.gradle")
+
+def appdAgentDir = project.hasProperty('appdAgentDir') ? project.getProperty('appdAgentDir') : '${projectDir}/appd-4.2.0.2'
+mainClassName = "ratpack.example.java.MyApp"
+applicationDefaultJvmArgs= ["-javaagent:${appdAgentDir}/javaagent.jar"]
