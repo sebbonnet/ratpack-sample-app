@@ -12,11 +12,8 @@ This is an example Ratpack app that:
 
 ## Getting Started
 
-Check this project out and run the following script by specifying the location of your appd agent installation using `appdAgentDir` property:
-e.g. ./runApp.sh -PappdAgentDir="`pwd`/appd-4.1.8.8"
-
-Your app should now be running (see http://gradle.org/docs/current/userguide/application_plugin.html) for more on what
-the Gradle application plugin can do for you.
+Check this project out and run `./runApp.sh` or `./runApp.bat`
+Your app should now be running on http://localhost:5050
 
 
 ## Generate traffic

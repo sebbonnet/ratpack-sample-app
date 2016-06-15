@@ -12,11 +12,11 @@ import javax.inject.Singleton;
 import static ratpack.example.java.infrastructure.datastore.AsyncCassandraWrapper.executeAsyncOnSubscribe;
 
 @Singleton
-public class DummyValueRepository {
+public class MyTableRepository {
     private final Session session;
 
     @Inject
-    public DummyValueRepository(Session session) {
+    public MyTableRepository(Session session) {
         this.session = session;
     }
 

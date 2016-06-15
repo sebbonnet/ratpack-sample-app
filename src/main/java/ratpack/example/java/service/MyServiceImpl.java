@@ -4,7 +4,7 @@ import com.datastax.driver.core.Session;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import ratpack.example.java.MyHandler;
-import ratpack.example.java.infrastructure.datastore.DummyValueRepository;
+import ratpack.example.java.infrastructure.datastore.MyTableRepository;
 import ratpack.example.java.infrastructure.httpclient.AsyncClientObservableWrapper;
 import ratpack.rx.RxRatpack;
 import rx.Observable;
@@ -59,7 +59,7 @@ public class MyServiceImpl implements MyService {
 
     @Override
     public Observable<String> getValueFromDatabase() {
-        return new DummyValueRepository(session).getValue(RxRatpack.scheduler());
+        return new MyTableRepository(session).getValue(RxRatpack.scheduler());
     }
 
     private void sleepFor(int millis) {

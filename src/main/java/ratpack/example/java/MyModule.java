@@ -4,8 +4,8 @@ import com.datastax.driver.core.Session;
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.Multibinder;
 import org.apache.http.nio.client.HttpAsyncClient;
-import ratpack.example.java.infrastructure.datastore.DummyValueRepository;
 import ratpack.example.java.infrastructure.datastore.EmbeddedCassandra;
+import ratpack.example.java.infrastructure.datastore.MyTableRepository;
 import ratpack.example.java.infrastructure.httpclient.HttpAsyncClientFactory;
 import ratpack.example.java.service.MyHystrixService;
 import ratpack.example.java.service.MyHystrixServiceImpl;
@@ -29,7 +29,7 @@ public class MyModule extends AbstractModule {
         bind(MyHystrixService.class).to(MyHystrixServiceImpl.class);
         bind(HttpAsyncClient.class).toInstance(HttpAsyncClientFactory.createHttpClient());
         bind(Session.class).toInstance(getCassandraSession());
-        bind(DummyValueRepository.class);
+        bind(MyTableRepository.class);
 
         bind(MyHandler.class);
         bind(FixedValueObservableHandler.class);
